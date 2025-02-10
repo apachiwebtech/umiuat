@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">umiuat</string>
+    <string name="title_activity_main">umiuat</string>
+    <string name="package_name">com.umiuat.app</string>
+    <string name="custom_url_scheme">com.umiuat.app</string>
+</resources>
