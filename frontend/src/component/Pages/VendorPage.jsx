@@ -29,7 +29,7 @@ const VendorPage = () => {
     const [logo, setlogo] = useState('')
     const dispatch = useDispatch()
     const handleclick = (e) => {
-        
+
         settoggle(!toggle)
         settoggle2(false);
         if (!toggle) {
@@ -43,12 +43,12 @@ const VendorPage = () => {
 
 
     const handleclick3 = (e) => {
-        
-        
+
+
         settoggle(false)
         settoggle2(!toggle2);
         setclick(e.target.value)
-        
+
         if (!toggle2) {
             setclick(e.target.value)
             localStorage.setItem('foodcat' , e.target.value)
@@ -145,9 +145,9 @@ const VendorPage = () => {
                 {imgload ?   <div style={{textAlign :"center"}}>
                    <HeaderSkelton style={{ margin: 'auto' }} />
                 </div> :null }
-             
-            
-                
+
+
+
                 {/* <span className='p-3'>FAST FOOD</span> */}
                 <h5 className='pt-2' style={{display : imgload ? "none" : "block"}}>{address}</h5>
                 <div className="backbtn" onClick={() => navigate(-1)}>
@@ -155,7 +155,7 @@ const VendorPage = () => {
                     <ArrowBackIosIcon />                </div>
             </div>
             <div className='row p-3 menu-search'>
-             
+
 
                 <div className='col-md-7 col-7 position-relative'>
                     <input onChange={(e) => setSearch(e.target.value)} className="border-yellow p-1 w-100" type='search' placeholder='Search (eg. Pav Bhaji)' />
@@ -183,11 +183,14 @@ const VendorPage = () => {
                     {data.length == 0 && <h2>Not available...</h2>}
                     {data.filter((item) => (item.type).includes(click)).filter((item) => (item.title.toLowerCase()).includes(search.toLocaleLowerCase())).map((item) => {
                         return (
-                            <div className='row p-1 border rounded-3 my-1' >
-                                <div className='col-4 col-md-4 '>
+                            <div className='row p-1 border rounded-3 my-1' style={{minHeight:"100px" }} >
+                                <div className='col-4 col-md-4 ' >
                                     <div className='position-relative rounded pro-img d-flex'>
-                                        <img onClick={() => handleclick2(item.id)} className='rounded' src={item.upload_image !== '' ? `${ IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
+                                        <img style={{minHeight:"100px" }} onClick={() => handleclick2(item.id)} className='rounded' src={item.upload_image !== '' ? `${ IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
                                         {/* <h3>Upto 30% Off</h3> */}
+                                        {item.discount_price > 0 &&
+                                               <span className='discount-price' style={{fontSize :"13px"}}><DiscountIcon fontSize='16px'/>Get for <span className='disc-child'>Rs. {item.price}/-</span></span>
+                                            }
                                     </div>
                                 </div>
 
@@ -197,13 +200,11 @@ const VendorPage = () => {
 
                                     {item.type == "1" ? <img className='veg-icon' src={veg} alt='' /> : <img className='veg-icon' src={nonveg} alt='' />}
 
-                                    {/* <p className='disc'>
+                                    <p className='disc'>
                                     {item.description}
-                                </p> */}
-                                    <p className='disc py-1'>
-                                        {/*  {item.type == "2" ? "Contain Eggs" : ""}<span className='text-danger'>*</span>*/}
-                                    </p>
-                                    <div className='d-flex justify-content-between align-items-center'>
+                                </p>
+
+                                    <div className='position-absolute w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center'>
                                         <h2>Rs.{Number(item.price) + Number(item.discount_price)}/-</h2>
 
                                         <div className='menu-add-remmove d-flex align-items-center '>
@@ -290,15 +291,13 @@ const VendorPage = () => {
                                             </button>
                                         </div>
                                     </div>
-                                    {item.discount_price > 0 &&   <div className='py-2'>
-                                               <span className='discount-price' style={{fontSize :"16px"}}><DiscountIcon fontSize='16px'/>Get for <span className='disc-child'>Rs. {item.price}/-</span></span>
-                                            </div> }
+
                                 </div>
                             </div>
                         )
                     })}
 
-             
+
                 </div>
             </div>
 

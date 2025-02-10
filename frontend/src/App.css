@@ -429,10 +429,16 @@ h2 {
   background-color: #fff;
 }
 .discount-price{
-  background: beige;
+  background: #00000054;
+  color: white;
   font-size: 10px;
-  border-radius: 10px;
+  /* z-index: 1000; */
+  /* border-radius: 10px; */
   padding: 2px;
+  position: absolute;
+  bottom: 0%;
+  width: 100%;
+  text-align: center;
 }
 .disc-child{
   font-weight: 600;
@@ -441,5 +447,5 @@ h2 {
 a{
   text-decoration: none !important;
   color: #000 !important;
-  
+
 }

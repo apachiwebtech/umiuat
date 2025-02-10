@@ -29,7 +29,7 @@ const MenuPage = () => {
 
     const handleclick = (e) => {
 
-        
+
         settoggle(!toggle)
         settoggle2(false);
         if (!toggle) {
@@ -43,11 +43,11 @@ const MenuPage = () => {
 
     const handleclick3 = (e) => {
 
-        
+
         settoggle(false)
         settoggle2(!toggle2);
         setclick(e.target.value)
-        
+
         if (!toggle2) {
             setclick(e.target.value)
             localStorage.setItem('foodcat', e.target.value)
@@ -159,10 +159,13 @@ const MenuPage = () => {
                     {data.filter((item) => (item.type).includes(click)).filter((item) => (item.title.toLowerCase()).includes(search.toLocaleLowerCase())).map((item) => {
                         return (
                             <div className='row p-1 border rounded-3 my-1'>
-                                <div className='col-4 col-md-4 ' onClick={() => handleclick2(item.id)}>
+                                <div className='col-4 col-md-4 ' style={{minHeight:"100px" }} onClick={() => handleclick2(item.id)}>
                                     <div className='position-relative rounded pro-img d-flex'>
-                                        <img className='rounded' src={item.upload_image !== '' ? `${ IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
+                                        <img style={{minHeight:"100px" }} className='rounded' src={item.upload_image !== '' ? `${ IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
                                         {/* <h3>Upto 30% Off</h3> */}
+                                        {item.discount_price > 0 &&
+                                               <span className='discount-price' style={{fontSize :"13px"}}><DiscountIcon fontSize='16px'/>Get for <span className='disc-child'>Rs. {item.price}/-</span></span>
+                                             }
                                     </div>
                                 </div>
 
@@ -175,10 +178,8 @@ const MenuPage = () => {
                                     {/* <p className='disc'>
                                     {item.description}
                                 </p> */}
-                                    <p className='disc py-1'>
-                                        {/* {item.type == "2" ? "Contain Eggs" : ""}<span className='text-danger'>*</span> */}
-                                    </p>
-                                    <div className='d-flex justify-content-between align-items-center'>
+
+                                    <div className='position-absolute w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center'>
                                         <h2>Rs.{Number(item.price) + Number(item.discount_price)}/-</h2>
 
                                         <div className='menu-add-remmove d-flex align-items-center '>
@@ -265,10 +266,8 @@ const MenuPage = () => {
                                             </button>
                                         </div>
                                     </div>
-                                    {item.discount_price > 0 &&   <div className='py-2'>
-                                               <span className='discount-price' style={{fontSize :"16px"}}><DiscountIcon fontSize='16px'/>Get for <span className='disc-child'>Rs. {item.price}/-</span></span>
-                                            </div> }
-                              
+
+
                                 </div>
                             </div>
                         )

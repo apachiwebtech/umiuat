@@ -400,14 +400,16 @@ select {
   line-height: 1.1;
 }
 .add-remmove input {
-  width: 15px;
-  height: 15px;
+  width: 40px;
+  height: 30px;
   outline: none;
-  font-size: 5px;
+  font-size: 13px;
+  font-weight: 500;
   text-align: center;
   border: none;
   border-bottom: 1px solid #febf10;
   border-top: 1px solid #febf10;
+
 }
 
 .pro-description {
@@ -415,17 +417,19 @@ select {
 }
 
 .add-remmove .plus {
-  padding: 4px 5px;
-  width: 13px;
-  font-size: 5px;
+  padding: 0px 0px;
+  width: 30px;
+  font-weight: bold;
+  font-size: 20px;
   border: none;
   background: #febf10;
   border-radius: 0px 5px 5px 0px;
 }
 .add-remmove .minus {
-  padding: 4px 5px;
-  width: 13px;
-  font-size: 5px;
+  padding: 0px 0px;
+  width: 30px;
+  font-weight: bold;
+  font-size: 20px;
   border: none;
   background: #febf10;
   border-radius: 5px 0px 0px 5px;
@@ -590,17 +594,19 @@ input[type="search"]::placeholder {
 }
 
 .menu-add-remmove .plus {
-  padding: 5px 12px;
-  width: 13px;
-  font-size: 5px;
+  padding: 0px 0px;
+  width: 30px;
+  font-weight: bold;
+  font-size: 20px;
   border: none;
   background: #febf10;
   border-radius: 0px 5px 5px 0px;
 }
 .menu-add-remmove .minus {
-  padding: 2px 12px;
-  width: 13px;
-  font-size: 11px;
+  padding: 0px 0px;
+  width: 30px;
+  font-weight: bold;
+  font-size: 20px;
   border: none;
   background: #febf10;
   border-radius: 5px 0px 0px 5px;
@@ -612,10 +618,11 @@ input[type="search"]::placeholder {
   right: 0px;
 }
 .menu-add-remmove input {
-  width: 25px;
-  height: 19px;
+  width: 40px;
+  height: 30px;
   outline: none;
-  font-size: 8px;
+  font-size: 13px;
+  font-weight: 500;
   text-align: center;
   border: none;
   border-bottom: 1px solid #febf10;
@@ -875,5 +882,5 @@ input[type="search"]::placeholder {
 a{
   text-decoration: none !important;
   color: #000 !important;
-  
+
 }
