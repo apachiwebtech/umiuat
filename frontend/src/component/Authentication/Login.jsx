@@ -104,18 +104,21 @@ const Login = () => {
     const handleGenerateOTP = () => {
         const generatedOTP = generateOTP(4); // Change 6 to the desired length of OTP
         setOTP(generatedOTP);
+        setShowOtp(true);
 
     };
+
+
 
     const onhandlesubmit = (e) => {
         e.preventDefault();
 
         const data = {
-            email: value.email,
+            mobile: value.mobile,
             otp: otp
         }
 
-        if (value.email !== "") {
+        if (value.mobile !== "") {
             setLoader(true)
 
            
@@ -153,7 +156,8 @@ const Login = () => {
 
                     if (res.data.data && res.data.data[0].id) {
 
-                        axios.post(`https://viggorventures.com/weblogin/umi_app_sendmail.php` , data)
+                        // axios.post(`https://viggorventures.com/weblogin/umi_app_sendmail.php` , data)
+                        // axios.post(data)
 
                         setShowOtp(true)
 
@@ -248,7 +252,8 @@ const Login = () => {
 
                         setHide(true)
                         
-                        axios.post(`https://viggorventures.com/weblogin/umi_app_sendmail.php` , data)
+                        // axios.post(`https://viggorventures.com/weblogin/umi_app_sendmail.php` , data)
+                        // axios.post( data)
 
 
                         const id = res.data.data[0].email; // Define id here
@@ -453,9 +458,9 @@ const navigate = useNavigate()
                                     </div>
 
                                     <div className='text-start'>
-                                        <TextField id="standard-basic" style={{ width: "100%" }} type='Enter your official email address' value={value.email} name='email' label="Email" onChange={onhandlechange} variant="standard" />
-                                        {error2 && <span className='text-danger' >Please enter the email</span>}
-                                        {error && <span className='text-danger'>Email id doesn't exist</span>}
+                                        <TextField id="standard-basic" style={{ width: "100%" }} type='Enter your official Mobile Number' value={value.mobile} name='mobile' label="Mobile Number" onChange={onhandlechange} variant="standard" />
+                                        {error2 && <span className='text-danger' >Please enter the Mobile Number</span>}
+                                        {error && <span className='text-danger'>Mobile Number doesn't exist</span>}
                                         {locerr && <span className='text-danger'>Location is not available</span>}
                                     </div>
                                 </div>
@@ -533,6 +538,7 @@ const navigate = useNavigate()
                         <div className='py-4'>
                             <h4 className=' sign-intru' style={{ textTransform: "capitalize" }}>OTP SEND ON YOUR OFFICIAL REGISTER EMAIL</h4>
                             <h4 className='mb-0 otp-intru' style={{ textTransform: "capitalize" }}>ENTER 4 DIGIT OTP</h4>
+                            <h4 className='mb-0 otp-intru' style={{ textTransform: "capitalize" }}>ENTER THIS 4 DIGIT OTP {otp}</h4>
                         </div>
 
 

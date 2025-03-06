@@ -217,12 +217,12 @@ app.get('/nodeapp/getos' , (req,res) =>{
 
 
 app.post('/nodeapp/user_login', (req, res) => {
-  let email = req.body.email;
+  let mobile = req.body.mobile;
   let otp = req.body.otp;
 
-  const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.email = ? and ar.deleted = 0 and ar.active = 1"
+  const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.mobile = ? and ar.deleted = 0 and ar.active = 1"
 
-  con.query(sql, [email], (err, data) => {
+  con.query(sql, [mobile], (err, data) => {
     if (err) {
       return res.json(err)
     } else {
@@ -235,18 +235,18 @@ app.post('/nodeapp/user_login', (req, res) => {
         let param;
 
 
-        console.log(email, "email")
+        console.log(mobile, "mobile")
 
-        if (email == "satyamsatkr875@gmail.com" || email == "Satyamsatkr875@gmail.com") {
-          sql2 = "UPDATE awt_registeruser SET otp = '1141' WHERE email = ?";
-          param = [email]
+        if (mobile == "9326476448" || mobile == "9326476448") {
+          sql2 = "UPDATE awt_registeruser SET otp = '1141' WHERE mobile = ?";
+          param = [mobile]
 
           console.log("1")
 
         } else {
 
-          sql2 = "UPDATE awt_registeruser SET otp = ? WHERE email = ?";
-          param = [otp, email]
+          sql2 = "UPDATE awt_registeruser SET otp = ? WHERE mobile = ?";
+          param = [otp, mobile]
 
           console.log("2")
         }
@@ -261,8 +261,8 @@ app.post('/nodeapp/user_login', (req, res) => {
 
             if (data.length !== 0) {
 
-              const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.email = ? and ar.deleted = 0;";
-              con.query(sql, [email], (err, data) => {
+              const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.mobile = ? and ar.deleted = 0;";
+              con.query(sql, [mobile], (err, data) => {
                 if (err) {
                   return res.json(err)
                 } else {
@@ -283,7 +283,7 @@ app.post('/nodeapp/user_login', (req, res) => {
                          }
                      })
 
-                //   return res.json(email)
+                //   return res.json(mobile)
                 }
               })
             }
@@ -307,21 +307,20 @@ app.post('/nodeapp/user_login', (req, res) => {
 
 
 app.post('/nodeapp/login', (req, res) => {
-  let email = req.body.email;
-  let fullname = req.body.fullname;
   let mobile = req.body.mobile;
+  let fullname = req.body.fullname;
   let otp = req.body.otp;
 
-  const sql = "SELECT * FROM awt_registeruser WHERE email = ? AND deleted = 0";
+  const sql = "SELECT * FROM awt_registeruser WHERE mobile = ? AND deleted = 0";
 
-  con.query(sql, [email], (err, data) => {
+  con.query(sql, [mobile], (err, data) => {
     if (err) {
       return res.json(err); // Return JSON error response
     } else {
       if (data.length !== 0) {
-        const updatesql = 'UPDATE `awt_registeruser` SET active = 1 , otp = ?  WHERE email = ? AND deleted = 0';
+        const updatesql = 'UPDATE `awt_registeruser` SET active = 1 , otp = ?  WHERE mobile = ? AND deleted = 0';
 
-        con.query(updatesql, [otp, email], (error, result) => {
+        con.query(updatesql, [otp, mobile], (error, result) => {
           if (error) {
             return res.json(error);
 
@@ -331,8 +330,8 @@ app.post('/nodeapp/login', (req, res) => {
 
           } else {
 
-            const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.email = ? and ar.deleted = 0;";
-            con.query(sql, [email], (err, data) => {
+            const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.mobile = ? and ar.deleted = 0;";
+            con.query(sql, [mobile], (err, data) => {
               if (err) {
                 return res.json(err)
               } else {
@@ -382,8 +381,8 @@ app.post('/nodeapp/otp', (req, res) => {
   let params;
 
   if (value == 1) {
-    const sql = "SELECT ar.role, ar.id,ar.email, ar.firstname,ar.lastname,ar.otp,ar.value, ar.mobile from awt_registeruser as ar where ar.email =?  and ar.otp = ? and ar.deleted = 0 ";
-    params = [email, otp]
+    const sql = "SELECT ar.role, ar.id,ar.email, ar.firstname,ar.lastname,ar.otp,ar.value, ar.mobile from awt_registeruser as ar where ar.mobile =?  and ar.otp = ? and ar.deleted = 0 ";
+    params = [mobile, otp]
 
     con.query(sql, params, (err, data) => {
       if (err) {
@@ -392,7 +391,7 @@ app.post('/nodeapp/otp', (req, res) => {
 
         //  const mailOptions = {
         //             from: process.env.SMTP_MAIL,
-        //             to: email,
+        //             to: mobile,
         //             subject: 'Welcome to Our Platform!',
         //             text: 'Thank you for registering. Your OTP is ' + otp,
         //           };
@@ -408,7 +407,7 @@ app.post('/nodeapp/otp', (req, res) => {
         //             if (error) {
         //               console.log(error);
         //             } else {
-        //               console.log('Email sent: ' + data);
+        //               console.log('mobile sent: ' + data);
         //             }
         //           });
         return res.json(data)
@@ -417,22 +416,22 @@ app.post('/nodeapp/otp', (req, res) => {
   }
 
   if (value == 0) {
-    const sql = "SELECT * from awt_registeruser_dummy where email = ? and otp = ? and deleted = 0 ";
-    params = [email, otp]
+    const sql = "SELECT * from awt_registeruser_dummy where mobile = ? and otp = ? and deleted = 0 ";
+    params = [mobile, otp]
     con.query(sql, params, (err, data) => {
       if (err) {
         return res.json(err)
       } else {
         if (data.length !== 0) {
 
-          const sql = "INSERT INTO awt_registeruser(`email`,`firstname`,`mobile`,`otp`,`created_date`) VALUES(?,?,?,?,?)"
+          const sql = "INSERT INTO awt_registeruser(`mobile`,`firstname`,`mobile`,`otp`,`created_date`) VALUES(?,?,?,?,?)"
 
-          con.query(sql, [email, fullname, mobile, otp, currentDate], (err, data) => {
+          con.query(sql, [mobile, fullname, mobile, otp, currentDate], (err, data) => {
             if (err) {
               return res.json(err)
             } else {
               const insertedId = data.insertId;
-              const sql = "SELECT ar.role, ar.id,ar.email, ar.firstname,ar.lastname,ar.otp,ar.value,au.pet_name, au.parent_name from awt_registeruser as ar left join awt_userprofile au on au.userid = ar.id WHERE ar.id = ? and ar.deleted = 0";
+              const sql = "SELECT ar.role, ar.id,ar.mobile, ar.firstname,ar.lastname,ar.otp,ar.value,au.pet_name, au.parent_name from awt_registeruser as ar left join awt_userprofile au on au.userid = ar.id WHERE ar.id = ? and ar.deleted = 0";
 
               con.query(sql, [insertedId], (err, data) => {
                 if (err) {
