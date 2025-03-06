@@ -151,7 +151,7 @@ function MobApp() {
 
   setTimeout(() => {
     setLoader(false)
-  }, 2000);
+  }, 4000);
 
 
 
