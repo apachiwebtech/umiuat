@@ -1,5 +1,5 @@
 import React from 'react';
-import videoSrc from '../../Images/loader.mp4'; // Path to your video
+import videoSrc from '../../Images/Umigif.gif'; // Path to your video
 
 const Splash = () => {
     return (
@@ -19,23 +19,11 @@ const Splash = () => {
                 overflow: 'hidden'
             }}
         >
-            {/* Video for the loader */}
-            <video 
-                src={videoSrc} 
-                autoPlay 
-                loop 
-                muted 
-                style={{
-                    position: 'absolute',  // Position video behind the content
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover' // Make the video cover the entire container without distortion
-                }} 
-            />
-            
+     
+
             <div className='text-center' style={{ zIndex: 10 }}>
                 {/* Your text or any other content */}
-                <img className='splash-text' src={videoSrc} alt='' /> {/* Replace with actual text or image */}
+                <img className='splash_img' src={videoSrc} alt='' /> {/* Replace with actual text or image */}
             </div>
         </div>
     );

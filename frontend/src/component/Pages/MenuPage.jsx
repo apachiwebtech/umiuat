@@ -152,7 +152,7 @@ const MenuPage = () => {
 
             </div>
 
-            <div className='menu-items p-3'>
+            <div className='menu-items p-1'>
             {loading ?    <ListSkeleton /> :null}
                 <div className='menu-pro-card  ' style={{display : loading ? "none" : "block"}}>
                     {data.length == 0 && <h2>Not available...</h2>}
@@ -160,12 +160,10 @@ const MenuPage = () => {
                         return (
                             <div className='row p-1 border rounded-3 my-1'>
                                 <div className='col-4 col-md-4 ' style={{minHeight:"100px" }} onClick={() => handleclick2(item.id)}>
-                                    <div className='position-relative rounded pro-img d-flex'>
-                                        <img style={{minHeight:"100px" }} className='rounded' src={item.upload_image !== '' ? `${ IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
+                                    <div className='position-relative rounded pro-img d-flex' style={{border : item.type == 1 ? '1px solid green' : '1px solid red'}}>
+                                        <img style={{height:"107px" }} className='rounded' src={item.upload_image !== '' ? `${ IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
                                         {/* <h3>Upto 30% Off</h3> */}
-                                        {item.discount_price > 0 &&
-                                               <span className='discount-price' style={{fontSize :"13px"}}><DiscountIcon fontSize='16px'/>Get for <span className='disc-child'>Rs. {item.price}/-</span></span>
-                                             }
+                                  
                                     </div>
                                 </div>
 
@@ -178,9 +176,12 @@ const MenuPage = () => {
                                     {/* <p className='disc'>
                                     {item.description}
                                 </p> */}
-
-                                    <div className='position-absolute w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center'>
                                         <h2>Rs.{Number(item.price) + Number(item.discount_price)}/-</h2>
+
+                                    <div className=' w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center'>
+                                    {item.discount_price > 0 ?
+                                               <span className='discount-price' style={{fontSize :"13px"}}><DiscountIcon fontSize='16px'/>Get for <span className='disc-child'>Rs. {item.price}/-</span></span> : <p></p>
+                                             }
 
                                         <div className='menu-add-remmove d-flex align-items-center '>
                                             <button onClick={() => {

@@ -776,12 +776,12 @@ const Cart = () => {
                         <div className='cart-pro-card ' style={{ display: loading ? "none" : "block" }}>
                             <div className='row p-1 border rounded-3 my-1'>
                                 <div className='col-2 col-md-2 '>
-                                    <div className='position-relative rounded pro-img d-flex'>
-                                        <img src={item.upload_image !== '' ? `${IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
+                                    <div className='position-relative rounded pro-img d-flex' style={{border : item.type == 1 ? '1px solid green' : '1px solid red'}}>
+                                        <img style={{height : "60px"}} src={item.upload_image !== '' ? `${IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
                                     </div>
                                 </div>
 
-                                <div className='col-6 col-md-6 pro-description position-relative'>
+                                <div className='col-5 col-md-5 pro-description position-relative'>
                                     <div className='d-flex'>
                                         <h2>{item.pname}</h2>
                                         {item.type == "1" ? <img className='veg-icon' style={{ width: "10px", height: "10px" }} src={veg} alt='' /> : <img className='veg-icon' style={{ width: "10px", height: "10px" }} src={nonveg} alt='' />}
@@ -792,7 +792,7 @@ const Cart = () => {
                                     </p>
                                 </div>
 
-                                <div className='col-3 col-md-3 border-end '>
+                                <div className='col-4 col-md-4 border-end '>
                                     <div className='d-flex mx-2' style={{ justifyContent: "end" }}>
                                         <div className='d-flex justify-content-between align-items-center'>
                                             <div className='menu-add-remmove d-flex align-items-center '>

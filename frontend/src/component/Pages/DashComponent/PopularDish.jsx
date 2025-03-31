@@ -93,14 +93,12 @@ const PopularDish = ({ click, currentloc, locid }) => {
             return (
               <div className='col-12' style={{ height: loading ? "90px" : "auto" }}>
                 <div className='pro-card p-1' style={{ display: loading ? "none" : "block" }} >
-                  <div className='row p-1 border rounded-3' style={{minHeight:"100px" }}>
+                  <div className='row p-1 border rounded-3' style={{ minHeight: "100px" }}>
                     <div className='col-4 col-md-5 '>
-                      <div className='position-relative rounded pro-img d-flex overflow-hidden'>
-                        <img style={{minHeight:"100px" }} onClick={() => handleclick(item.id)} src={item.upload_image !== '' ? `${IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
+                      <div className='position-relative rounded pro-img d-flex overflow-hidden' style={{ border: item.type == 1 ? '1px solid green' : '1px solid red' }}>
+                        <img style={{ height: "107px" }} onClick={() => handleclick(item.id)} src={item.upload_image !== '' ? `${IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
                         {/* <h3>Upto {item.rate} Off</h3> */}
-                      {item.discount_price > 0 &&
-                        <span className=' discount-price'><DiscountIcon fontSize='16px' />Get for <span className='disc-child'>Rs. {item.price}/-</span></span>
-                     }
+
                       </div>
                     </div>
 
@@ -122,10 +120,12 @@ const PopularDish = ({ click, currentloc, locid }) => {
                         <h2>{item.description}</h2>
                       </div>
 
+                      <span ><b>Rs. {Number(item.price) + Number(item.discount_price)}/-</b></span>
 
-                      <div className='position-absolute w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center '>
-                        <span><b>Rs. {Number(item.price) + Number(item.discount_price)}/-</b></span>
-
+                      <div className=' w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center '>
+                        {item.discount_price > 0 ?
+                          <span className='discount-price'><DiscountIcon fontSize='16px' />Get for <span className='disc-child'>Rs. {item.price}/-</span></span> : <p></p>
+                        }
                         <div className=' add-remmove d-flex align-items-center  '>
                           <button onClick={() => {
 
@@ -219,6 +219,8 @@ const PopularDish = ({ click, currentloc, locid }) => {
 
                         </div>
                       </div>
+
+
 
 
 

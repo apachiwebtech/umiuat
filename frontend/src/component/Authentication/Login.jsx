@@ -115,6 +115,7 @@ const Login = () => {
 
         const data = {
             mobile: value.mobile,
+            email : value.mobile,
             otp: otp
         }
 
@@ -156,7 +157,7 @@ const Login = () => {
 
                     if (res.data.data && res.data.data[0].id) {
 
-                        // axios.post(`https://viggorventures.com/weblogin/umi_app_sendmail.php` , data)
+                        axios.post(`https://viggorventures.com/weblogin/umi_app_sendmail.php` , data)
                         // axios.post(data)
 
                         setShowOtp(true)
@@ -458,9 +459,9 @@ const navigate = useNavigate()
                                     </div>
 
                                     <div className='text-start'>
-                                        <TextField id="standard-basic" style={{ width: "100%" }} type='Enter your official Mobile Number' value={value.mobile} name='mobile' label="Mobile Number" onChange={onhandlechange} variant="standard" />
-                                        {error2 && <span className='text-danger' >Please enter the Mobile Number</span>}
-                                        {error && <span className='text-danger'>Mobile Number doesn't exist</span>}
+                                        <TextField id="standard-basic" style={{ width: "100%" }} type='Enter your official Mobile Number' value={value.mobile} name='mobile' label="Mobile / Email" onChange={onhandlechange} variant="standard" />
+                                        {error2 && <span className='text-danger' >Please enter the Mobile / Email</span>}
+                                        {error && <span className='text-danger'>Mobile / Email doesn't exist</span>}
                                         {locerr && <span className='text-danger'>Location is not available</span>}
                                     </div>
                                 </div>

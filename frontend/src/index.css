@@ -409,7 +409,6 @@ select {
   border: none;
   border-bottom: 1px solid #febf10;
   border-top: 1px solid #febf10;
-
 }
 
 .pro-description {
@@ -704,12 +703,11 @@ input[type="search"]::placeholder {
 
 /* Splash Start  */
 .splash-main {
-  background-image: linear-gradient(#feb410, #f15d45, #eea130);
+  /* background-image: linear-gradient(#feb410, #f15d45, #eea130); */
+  background-image: linear-gradient(#fcbc0e, #fcbc0e, #fcbc0e);
   height: 100vh;
 }
-.splash-main img {
-  width: 100%;
-}
+
 .splash-text {
   width: 250px !important;
   padding-top: 60px;
@@ -861,26 +859,32 @@ input[type="search"]::placeholder {
   padding: 10px 0px;
   border-bottom: 1px solid #eea130;
 }
-.order-no{
+.order-no {
   border-bottom: 1px solid lightgray;
 }
 
-.total-amt{
+.total-amt {
   color: olive;
 }
 
 /* order cards end*/
 
-.backbtn{
-  position :absolute;
-  left :15px;
-  top :10px;
+.backbtn {
+  position: absolute;
+  left: 15px;
+  top: 10px;
 }
-.backbtn i{
+.backbtn i {
   font-size: 30px;
 }
-a{
+a {
   text-decoration: none !important;
   color: #000 !important;
-
+}
+.splash_img {
+  width: 122%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }

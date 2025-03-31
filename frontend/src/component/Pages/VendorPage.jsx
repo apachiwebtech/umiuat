@@ -25,7 +25,7 @@ const VendorPage = () => {
     const [company, setCompany] = useState('')
     const [address, setaddress] = useState('')
     const [loader2, setLoader2] = useState(true)
-    const [imgload , setImgLoad] = useState(true)
+    const [imgload, setImgLoad] = useState(true)
     const [logo, setlogo] = useState('')
     const dispatch = useDispatch()
     const handleclick = (e) => {
@@ -34,10 +34,10 @@ const VendorPage = () => {
         settoggle2(false);
         if (!toggle) {
             setclick(e.target.value)
-            localStorage.setItem('foodcat' , e.target.value)
+            localStorage.setItem('foodcat', e.target.value)
         } else {
             setclick('')
-            localStorage.setItem('foodcat' , '')
+            localStorage.setItem('foodcat', '')
         }
     }
 
@@ -51,10 +51,10 @@ const VendorPage = () => {
 
         if (!toggle2) {
             setclick(e.target.value)
-            localStorage.setItem('foodcat' , e.target.value)
+            localStorage.setItem('foodcat', e.target.value)
         } else {
             setclick('')
-            localStorage.setItem('foodcat' , '')
+            localStorage.setItem('foodcat', '')
         }
     }
 
@@ -104,16 +104,16 @@ const VendorPage = () => {
 
         setclick(localStorage.getItem('foodcat'))
 
-        if(localStorage.getItem('foodcat') == '1' ){
-          settoggle(!toggle)
-          settoggle2(false);
-        } else if(localStorage.getItem('foodcat') == '2' ){
+        if (localStorage.getItem('foodcat') == '1') {
+            settoggle(!toggle)
+            settoggle2(false);
+        } else if (localStorage.getItem('foodcat') == '2') {
             settoggle(false)
             settoggle2(!toggle2);
-          }
-          if(localStorage.getItem('foodcat') == ''){
+        }
+        if (localStorage.getItem('foodcat') == '') {
             settoggle(false)
-          }
+        }
     }, [vendid])
 
 
@@ -136,20 +136,20 @@ const VendorPage = () => {
             <div className='menu-header p-3 ' style={{ position: "relative" }}>
                 {/* <p className=''><span className='p-1 '>4.5 ⭐</span></p> */}
 
-                {logo == "" ? <h2 style={{display : imgload ? "none" : "block"}}>{company}</h2> :     <div style={{ width: "100%", display: "flex", alignItems: 'center' }}>
-                    <img onLoad={() =>{
+                {logo == "" ? <h2 style={{ display: imgload ? "none" : "block" }}>{company}</h2> : <div style={{ width: "100%", display: "flex", alignItems: 'center' }}>
+                    <img onLoad={() => {
                         setImgLoad(false)
                     }} style={{ width: "100px", margin: "auto" }} src={`${IMAGE_URL}/vendorlogo/${logo}`} alt="" />
                 </div>}
 
-                {imgload ?   <div style={{textAlign :"center"}}>
-                   <HeaderSkelton style={{ margin: 'auto' }} />
-                </div> :null }
+                {imgload ? <div style={{ textAlign: "center" }}>
+                    <HeaderSkelton style={{ margin: 'auto' }} />
+                </div> : null}
 
 
 
                 {/* <span className='p-3'>FAST FOOD</span> */}
-                <h5 className='pt-2' style={{display : imgload ? "none" : "block"}}>{address}</h5>
+                <h5 className='pt-2' style={{ display: imgload ? "none" : "block" }}>{address}</h5>
                 <div className="backbtn" onClick={() => navigate(-1)}>
 
                     <ArrowBackIosIcon />                </div>
@@ -175,22 +175,20 @@ const VendorPage = () => {
 
             </div>
 
-            <div className='menu-items p-3'>
+            <div className='menu-items'>
 
-                    {loading ?    <ListSkelton /> :null}
-                <div className='menu-pro-card' style={{display : loading ? "none" : "block"}}>
+                {loading ? <ListSkelton /> : null}
+                <div className='menu-pro-card' style={{ display: loading ? "none" : "block" }}>
 
                     {data.length == 0 && <h2>Not available...</h2>}
                     {data.filter((item) => (item.type).includes(click)).filter((item) => (item.title.toLowerCase()).includes(search.toLocaleLowerCase())).map((item) => {
                         return (
-                            <div className='row p-1 border rounded-3 my-1' style={{minHeight:"100px" }} >
+                            <div className='row p-1 border rounded-3 my-1' style={{ minHeight: "100px" }} >
                                 <div className='col-4 col-md-4 ' >
-                                    <div className='position-relative rounded pro-img d-flex'>
-                                        <img style={{minHeight:"100px" }} onClick={() => handleclick2(item.id)} className='rounded' src={item.upload_image !== '' ? `${ IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
+                                    <div className='position-relative rounded pro-img d-flex' style={{border : item.type == 1 ? '1px solid green' : '1px solid red'}}>
+                                        <img style={{ height: "107px" }} onClick={() => handleclick2(item.id)} className='rounded' src={item.upload_image !== '' ? `${IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
                                         {/* <h3>Upto 30% Off</h3> */}
-                                        {item.discount_price > 0 &&
-                                               <span className='discount-price' style={{fontSize :"13px"}}><DiscountIcon fontSize='16px'/>Get for <span className='disc-child'>Rs. {item.price}/-</span></span>
-                                            }
+
                                     </div>
                                 </div>
 
@@ -201,11 +199,14 @@ const VendorPage = () => {
                                     {item.type == "1" ? <img className='veg-icon' src={veg} alt='' /> : <img className='veg-icon' src={nonveg} alt='' />}
 
                                     <p className='disc'>
-                                    {item.description}
-                                </p>
+                                        {item.description}
+                                    </p>
+                                    <h2>Rs.{Number(item.price) + Number(item.discount_price)}/-</h2>
 
-                                    <div className='position-absolute w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center'>
-                                        <h2>Rs.{Number(item.price) + Number(item.discount_price)}/-</h2>
+                                    <div className=' w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center'>
+                                        {item.discount_price > 0 ?
+                                            <span className='discount-price' style={{ fontSize: "13px" }}><DiscountIcon fontSize='16px' />Get for <span className='disc-child'>Rs. {item.price}/-</span></span> : <p></p>
+                                        }
 
                                         <div className='menu-add-remmove d-flex align-items-center '>
                                             <button onClick={() => {
@@ -313,7 +314,7 @@ const VendorPage = () => {
 
                 <div className='pro-detail-card m-2 p-2'>
                     <div className='detail-img d-flex justify-content-center align-items-center'>
-                        <img src={detail.upload_image !== '' ? `${ IMAGE_URL}/product/` + detail.upload_image : Notimg} alt='' />
+                        <img src={detail.upload_image !== '' ? `${IMAGE_URL}/product/` + detail.upload_image : Notimg} alt='' />
 
                     </div>
 
@@ -330,9 +331,9 @@ const VendorPage = () => {
                             </div>
                         </div>
                         <p>Rs.{Number(detail.price) + Number(detail.discount_price)}/-</p>
-                            {detail.discount_price > 0 &&   <div className='py-2'>
-                                               <span className='discount-price' style={{fontSize :"16px"}}><DiscountIcon fontSize='16px'/>Get for <span className='disc-child'>Rs. {detail.price}/-</span></span>
-                                            </div> }
+                        {detail.discount_price > 0 && <div className='py-2'>
+                            <span className='discount-price' style={{ fontSize: "16px" }}><DiscountIcon fontSize='16px' />Get for <span className='disc-child'>Rs. {detail.price}/-</span></span>
+                        </div>}
 
                         <p className='disc'>
                             {detail.description}

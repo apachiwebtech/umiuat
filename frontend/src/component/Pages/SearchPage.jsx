@@ -62,12 +62,10 @@ const SearchPage = () => {
           return (
             <div className='row p-1 border rounded-3 my-1'>
               <div className='col-4 col-md-4 ' style={{minHeight:"100px" }} >
-                <div className='position-relative rounded pro-img d-flex'>
-                  <img style={{minHeight:"100px" }} className='rounded' src={item.upload_image !== '' ? `${IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
+                <div className='position-relative rounded pro-img d-flex' style={{border : item.type == 1 ? '1px solid green' : '1px solid red'}}>
+                  <img style={{height:"107px" }} className='rounded' src={item.upload_image !== '' ? `${IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
                   {/* <h3>Upto 30% Off</h3> */}
-                  {item.discount_price > 0 &&
-                    <span className='discount-price' style={{ fontSize: "13px" }}><DiscountIcon fontSize='16px' />Get for <span className='disc-child'>Rs. {item.price}/-</span></span>
-                  }
+              
                 </div>
               </div>
 
@@ -84,8 +82,12 @@ const SearchPage = () => {
                   Contain Eggs<span className='text-danger'>*</span>
                 </p> : <p></p>}
 
-                <div className='position-absolute w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center'>
                   <h2>Rs.{Number(item.price) + Number(item.discount_price)}/-</h2>
+                <div className='w-100 bottom-0 mb-2 d-flex justify-content-between align-items-center'>
+
+                  {item.discount_price > 0 ?
+                    <span className='discount-price' style={{ fontSize: "12px" }}><DiscountIcon fontSize='16px' />Get for <span className='disc-child'>Rs. {item.price}/-</span></span>:<p></p>
+                  }
 
                   <div className='menu-add-remmove d-flex align-items-center '>
                     <button onClick={() => {
