@@ -17,7 +17,7 @@ const Banner = () => {
 
   const [banner, setBanner] = useState([]);
   const [loading, setLoading] = useState(true);
- 
+
   function handleLoad() {
     // setLoading(false);
   }
@@ -37,42 +37,53 @@ const Banner = () => {
   };
 
   const getBannerImage = async () => {
-
+    const locid = localStorage.getItem('locid');
+    const vendorId = localStorage.getItem('VendorId');
+    const comid = localStorage.getItem('companyid');
+  
     const data = {
-      locid: localStorage.getItem('locid'),
-      vendorId:localStorage.getItem('VendorId'),
-      comid:localStorage.getItem('companyid'),
-      version : VERSION
-    }
+      locid,
+      vendorId,
+      comid,
+      version: VERSION,
+    };
+  
     const response = await axios.post(`${BASE_URL}/banner`, data);
-
-    setBanner(response.data);
-    // Cache data in localStorage
-    localStorage.setItem(CACHE_KEY, JSON.stringify({
-      data: response.data,
-      timestamp: Date.now()
-    }));
-
+  
+    const banners = response.data || [];
+  
+    const orBanners = banners.filter(banner => banner.add_type === 'OR');
+  
+    const andBanners = banners.filter(banner => {
+      const isCompanyMatch = banner.company_id === comid;
+      const isVendorMatch = banner.vendor === vendorId;
+      const isLocationMatch = banner.location === locid;
+  
+      return (
+        (banner.location === '' && isVendorMatch && isCompanyMatch) ||
+        (banner.vendor === '' && isLocationMatch && isCompanyMatch) ||
+        (isVendorMatch && isLocationMatch) 
+      );
+    });
+  
+    // Merge both sets and avoid duplicates (optional)
+    const allBanners = [...orBanners, ...andBanners];
+  
+    // Remove duplicates if needed (based on unique id or some key)
+    const uniqueBanners = Array.from(
+      new Map(allBanners.map(b => [b.id, b])).values() // assuming `id` is unique
+    );
+  
+    setBanner(uniqueBanners);
   };
+  
+  
+  
 
   useEffect(() => {
-    // const cachedData = localStorage.getItem(CACHE_KEY);
-    // if (cachedData) {
-    //   const { data, timestamp } = JSON.parse(cachedData);
-    //   // Check if cache is expired
-    //   if (Date.now() - timestamp < CACHE_EXPIRY_MS) {
-    //     setBanner(data);
-    //   } else {
-    //     getBannerImage(); // Fetch new data if cache is expired
 
-    //   }
-    // } else {
-    //   getBannerImage(); // Fetch data if not cached
-    // }
-    
     getBannerImage(); // Fetch data if not cached
 
-    // getBannerImage();
     setTimeout(() => {
       setLoading(false);
     }, 500);
@@ -84,7 +95,7 @@ const Banner = () => {
 
 
   return (
-    <div  className="Banner-Head" >
+    <div className="Banner-Head" >
       <Carousel
         infinite={true}
         responsive={responsive}
@@ -103,12 +114,13 @@ const Banner = () => {
 
             return (
               <div >
+
+
+
                 {item.external_type === 1 ? <Link to={item.link} className="card banner-card" key={item.id}>
                   <img src={`${IMAGE_URL}/banner/${item.upload_image}`} alt="" />
-                  {/* <img src={`${item.upload_image}`} alt="" /> */}
                 </Link> : <Link to={`/vendorpage/${item.vendor}`} className="card banner-card" key={item.id}>
                   <img onLoad={() => handleLoad()} src={`${IMAGE_URL}/banner/${item.upload_image}`} alt="" style={{ display: loading ? 'none' : 'block' }} />
-                  {/* <img src={`${item.upload_image}`} alt="" /> */}
                 </Link>}
 
 

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import InnerHeader from '../Layout/InnerHeader'
-import clocki from '../../Images/clock.png'
-import { colors } from '@mui/material'
 import axios from 'axios'
 import { BASE_URL } from '../Utils/BaseUrl'
 
@@ -10,6 +8,7 @@ function OrderHistory() {
 
   const [data, setData] = useState([])
   const [list, setlist] = useState([])
+  const [invoice, setInvoices] = useState([])
 
 
   async function getorderdetails() {
@@ -35,6 +34,19 @@ function OrderHistory() {
 
       .then((res) => {
         setlist(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  const handleinvoices = (id) => {
+    axios.post(`${BASE_URL}/getinvoices`, { order_id: id })
+
+      .then((res) => {
+        setInvoices(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
       })
   }
 
@@ -74,7 +86,8 @@ function OrderHistory() {
                   <button className='btn border border-warning w-100' onClick={() => handlelist(item.id)} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">View Items</button>
                 </div>
                 <div className='col-6 p-2'>
-                  <button className='btn border border-warning w-100' onClick={() => window.location.href = `https://viggorventures.com/weblogin/invoice.php?id=${item.id}`} type="button">Invoice</button>
+                  <button className='btn border border-warning w-100' onClick={() => handleinvoices(item.id)} data-bs-toggle="modal" data-bs-target="#exampleModal1" type="button">Invoice</button>
+
                 </div>
 
               </div>
@@ -108,6 +121,41 @@ function OrderHistory() {
                               <td>{item.price}</td>
                               <td>{item.pqty}</td>
                               <td>{item.orderstatus == 1 ? <div className='text-danger'>Placed</div> : item.orderstatus == 2 ? <div className='text-warning'>Processing</div> : item.orderstatus == 3 ? <div className='text-success'>Ready</div> : item.orderstatus == 4 ? <div className='text-success'>Delivered</div> : <div></div>}</td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+
+                    </table>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Invoice List</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <table width="100%" >
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Invoice No.</th>
+                          <th>View</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {invoice.map((item, index) => {
+                          return (
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>{item.invoice_no}</td>
+                              <td className='btn btn-primary btn-sm mb-1'  ><a href={`https://viggorventures.com/webloginuat/invoice.php?id=${item.id}`} download>Download</a></td>
                             </tr>
                           )
                         })}
