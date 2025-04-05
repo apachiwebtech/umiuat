@@ -40,6 +40,8 @@ const Banner = () => {
 
     const data = {
       locid: localStorage.getItem('locid'),
+      vendorId:localStorage.getItem('VendorId'),
+      comid:localStorage.getItem('companyid'),
       version : VERSION
     }
     const response = await axios.post(`${BASE_URL}/banner`, data);

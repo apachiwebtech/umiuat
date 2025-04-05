@@ -89,7 +89,7 @@ const Dash = () => {
   async function getLocation() {
     const data = {
       loc_id: localStorage.getItem('locid'),
-      version : VERSION
+      version: VERSION
     }
 
     axios.post(`${BASE_URL}/get_loc`, data)
@@ -147,19 +147,28 @@ const Dash = () => {
   const handlegetvendor = async (id) => {
     const data = {
       loc_id: id || localStorage.getItem('lastloc'),
-      version:VERSION
+      version: VERSION
+    };
+
+    try {
+      const response = await axios.post(`${BASE_URL}/vendorList`, data);
+  
+      if (response.data && response.data.length > 0) {
+        const vendorId = response.data[0].id;
+  
+        localStorage.setItem("VendorId", vendorId); 
+      }
+  
+      setCurrentid(id ||  localStorage.getItem('lastloc')); 
+      setVendor(response.data);
+  
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    } catch (error) {
+      console.error("Error fetching vendor list:", error);
     }
-
-    const response = await axios.post(`${BASE_URL}/vendorList`, data);
-
-    setCurrentid(localStorage.getItem('lastloc'))
-
-    setVendor(response.data);
-    setTimeout(() => {
-
-      setLoading(false)
-    }, 500);
-  }
+  };
 
 
   const handleversioncheck = async () => {
@@ -173,8 +182,8 @@ const Dash = () => {
       .then((res) => {
 
 
-       
-        if(Cookies.get('version')){
+
+        if (Cookies.get('version')) {
 
           setversion(false)
         }
@@ -231,8 +240,8 @@ const Dash = () => {
     }
   }
 
-  
-  
+
+
 
 
 
@@ -308,11 +317,16 @@ const Dash = () => {
 
             <div className='col-md-5 col-5 '>
               <select className="border-yellow w-100 px-1 py-1 mx-1" onChange={(e) => {
-                getVendorSpecificProducts(e.target.value)
+                getVendorSpecificProducts(e.target.value);
+                const vendorId = getVendorSpecificProducts(e.target.value);
+                localStorage.getItem("VendorId", vendorId); 
               }}>
+
+
 
                 <option>SELECT VENDOR</option>
                 {
+
                   Vendor?.map((item) => {
                     return (
                       <option key={item.id} value={item.id}> <Link to={`/menupage/${item.id}`}> {item.company_name}</Link></option>
@@ -354,11 +368,11 @@ const Dash = () => {
         <div className='update-pop' style={{ padding: "20px", position: "absolute" }}>
           <p>Please download our latest version..</p>
           <div className='d-flex justify-content-between'>
-            <button onClick={() =>{
-               setversion(false)
-               Cookies.set('version', 1, { expires: 1/24 });
-;
-               }}>Cancel</button>
+            <button onClick={() => {
+              setversion(false)
+              Cookies.set('version', 1, { expires: 1 / 24 });
+              ;
+            }}>Cancel</button>
             <Link to={`https://play.google.com/store/apps/details?id=com.umifood.app`}><button style={{ background: "#febf10", color: "#fff" }}>Update</button></Link>
           </div>
         </div>
