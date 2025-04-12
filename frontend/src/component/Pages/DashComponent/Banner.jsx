@@ -10,8 +10,6 @@ import { Link } from "react-router-dom";
 import Bannerskelton from "../skelton/Bannerskelton";
 // import { Browser } from '@capacitor/browser';
 
-const CACHE_KEY = 'banner_data'; // Key for localStorage caching
-const CACHE_EXPIRY_MS = 1000 * 60 * 15; // Cache expiry time (15 minutes)
 
 const Banner = () => {
 
@@ -102,7 +100,7 @@ const Banner = () => {
         arrows={false}
         showDots={true}
         autoPlay={true}
-
+        autoPlaySpeed={5000} // 5 seconds
       >
 
         {banner.map((item) => {

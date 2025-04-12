@@ -28,20 +28,20 @@ function OfferPage() {
 
     const count = useSelector((state) => state.cartCount.cartcount);
 
-    const applycode = (code,price) =>{
-        if(count > 0){
-             localStorage.setItem('CopyCoupon' , code)
-             Navigate('/cart')
-        }else{
+    const applycode = (code, price) => {
+        if (count > 0) {
+            localStorage.setItem('CopyCoupon', code)
+            Navigate('/cart')
+        } else {
             alert("Please add items")
         }
     }
 
     async function getofferdata() {
-        const data ={
-            company_id : localStorage.getItem('companyid')
+        const data = {
+            company_id: localStorage.getItem('companyid')
         }
-        axios.post(`${BASE_URL}/getofferdata` ,data)
+        axios.post(`${BASE_URL}/getofferdata`, data)
             .then((res) => {
                 console.log(res)
                 setData(res.data)
@@ -62,27 +62,39 @@ function OfferPage() {
 
             <div>
 
-            {loading ?  <div className='p-3'>
+                {loading ? <div className='p-3'>
 
-             <ListSkeleton  />
-               </div> : null}  
+                    <ListSkeleton />
+                </div> : null}
 
                 {data.map((item) => {
                     return (
-                        <div className='row align-items-center border m-2 p-2 rounded ' style={{display : loading ? "none" : "flex"}}>
-                            <div className='col-md-9 col-9 d-flex'>
-                                <div style={{ width: "70px" , borderRight : "1px solid lightgrey"  }} className='px-2'>
-                                    <img src={`${IMAGE_URL}/coupon/` + item.coupon_code_img} style={{ width: "100%" }} alt="" />
-                                </div>
-                                <div>
- 
-                                <input value={item.couponCode} ref={offerCodeRef} style={{ fontSize: "14px", marginLeft: "10px", width: "60%", border: "none", background: "#fff", fontWeight: "900" }} disabled />
-                                <p style={{marginLeft :"10px", color :"lightslategray", textOverflow: "ellipsis" , width :"170px",overflow : "hidden", whiteSpace :"nowrap"}}>{item.description}</p>
+                        <div className='bg-secondary-subtle px-1 pb-1 my-2'>
+                            <div className='row bg-light align-items-center border m-1 p-2 rounded ' style={{ display: loading ? "none" : "flex" }}>
+                                <div className='row'>
+                                    <div className='col-md-9 col-9 d-flex'>
+                                        <div style={{ width: "120px" }} className='px-2'>
+                                            <img src={`${IMAGE_URL}/coupon/` + item.coupon_code_img} className='rounded' style={{ width: "100%" }} alt="" />
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <input value={item.title}  style={{ fontSize: "14px", width: "60%", border: "none", fontWeight: "900" }} disabled />
+                                            </div>
+                                            <div>
+                                                <span style={{fontSize : "12px"}}>Use Code</span>
+                                                <input value={item.couponCode} ref={offerCodeRef} style={{ fontSize: "14px", marginLeft: "2px", width: "60%", border: "none", fontWeight: "900" }} disabled />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div className='col-md-3 col-3 '>
+                                        <button className='copy-btn rounded' onClick={() => applycode(item.couponCode, item.price)}>Apply </button>
+                                    </div>
                                 </div>
 
-                            </div>
-                            <div className='col-md-3 col-3'>
-                                <button className='copy-btn' onClick={() => applycode(item.couponCode,item.price)}>Apply </button>
+                                <div className='mt-2 ' style={{ borderTop :"1px dotted black"}}>
+                                    <p className='pt-2' style={{ color: "lightslategray", overflow: "hidden", whiteSpace: "wrap" ,fontSize :"14px" }}>{item.description}</p>
+                                </div>
                             </div>
                         </div>
                     )
@@ -90,7 +102,7 @@ function OfferPage() {
 
             </div>
 
-              <Footer />
+            <Footer />
         </div>
     )
 }

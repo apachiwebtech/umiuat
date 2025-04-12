@@ -648,7 +648,7 @@ const Cart = () => {
 
         localStorage.removeItem('CopyCoupon')
 
-        axios.post(`${BASE_URL}/check_coupen_new`, data)
+        axios.post(`https://viggorventures.com/webloginuat/api/php_api.php?check_coupen_new`, data)
             .then((res) => {
 
                 setDiscount(res.data[0] && res.data[0].discountAmtPer)
