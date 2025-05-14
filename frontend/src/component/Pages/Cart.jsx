@@ -300,13 +300,18 @@ const Cart = () => {
         axios.post(`${BASE_URL}/getcartData`, data)
             .then((res) => {
 
-                setProduct(res.data)
-                setTimeout(() => {
-                    setLoading(false)
-                }, 500);
+                if (res.data) {
+                    setProduct(res.data)
+
+                    setTimeout(() => {
+                        setLoading(false)
+                    }, 500);
 
 
-                dispatch(getCartCount())
+                    dispatch(getCartCount())
+                }
+
+
             })
 
         setTimeout(() => {
@@ -648,7 +653,7 @@ const Cart = () => {
 
         localStorage.removeItem('CopyCoupon')
 
-        axios.post(`https://viggorventures.com/webloginuat/api/php_api.php?check_coupen_new`, data)
+        axios.post(`https://viggorventures.com/webloginuat/api/php_api.php`, data)
             .then((res) => {
 
                 setDiscount(res.data[0] && res.data[0].discountAmtPer)
@@ -776,8 +781,8 @@ const Cart = () => {
                         <div className='cart-pro-card ' style={{ display: loading ? "none" : "block" }}>
                             <div className='row p-1 border rounded-3 my-1'>
                                 <div className='col-2 col-md-2 '>
-                                    <div className='position-relative rounded pro-img d-flex' style={{border : item.type == 1 ? '1px solid green' : '1px solid red'}}>
-                                        <img style={{height : "60px"}} src={item.upload_image !== '' ? `${IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
+                                    <div className='position-relative rounded pro-img d-flex' style={{ border: item.type == 1 ? '1px solid green' : '1px solid red' }}>
+                                        <img style={{ height: "60px" }} src={item.upload_image !== '' ? `${IMAGE_URL}/product/` + item.upload_image : Notimg} alt='' />
                                     </div>
                                 </div>
 
@@ -870,9 +875,9 @@ const Cart = () => {
 
                     <div className='coupon-navigate    row align-items-center'>
                         <p className='fw-bold col-3'>Check Coupon</p>
-                        <p className='col-6'><img style={{width:"20px"}} src={offer} alt='' /></p>
+                        <p className='col-6'><img style={{ width: "20px" }} src={offer} alt='' /></p>
                         <div className='col-3'>
-                           <Link to={`/offerpage`}> <button className=''>View</button></Link>
+                            <Link to={`/offerpage`}> <button className=''>View</button></Link>
                         </div>
                     </div>
                 </div>}
