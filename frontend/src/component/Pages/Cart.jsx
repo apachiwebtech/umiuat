@@ -630,12 +630,13 @@ const Cart = () => {
         return acc + itemTotal;
     }, 0);
 
-    let discountper = (100 * discount) / totalPrice
+    let discountper = (discount / totalPrice) * 100;
 
     const totalgstamt = totalCgst + totalSgst
 
 
-    const amtbeforegst = totalPrice - totalgstamt
+
+    const amtbeforegst = (totalPrice - discount) - totalgstamt;
 
 
     function checkcoupon() {

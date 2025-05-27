@@ -16,10 +16,8 @@ const cron = require('node-cron');
 const cluster = require('cluster');
 const os = require('os');
 const numCPUs = os.cpus().length;
-const axios = require('axios');
 
 dotenv.config();
-
 
 app.use(
   cors({
@@ -37,14 +35,14 @@ app.use(function (req, res, next) {
 app.use(express.json());
 app.use(bodyParser.json());
 
-// const storage = multer.diskStorage({
-//   destination: '../public_html/pet-app/upload/subcategory/', // 
-//   filename: (req, file, cb) => {
-//     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-//   },
-// });
+const storage = multer.diskStorage({
+  destination: '../public_html/pet-app/upload/subcategory/', // 
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  },
+});
 
-// const upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
 
 app.get('/nodeapp', (req, res) => {
@@ -54,94 +52,90 @@ app.get('/nodeapp', (req, res) => {
 // const port = process.env.PORT;
 
 
-function checkpaymentstatus() {
+// function checkpaymentstatus() {
 
-  const secret = process.env.RAZORPAY_SECRET;
-  let Placed = "placed";
-  const date = new Date()
-
-
-  const checkPayDetails = "SELECT * FROM `payment_log` WHERE pstatus = 0 and deleted = 0";
-
-  con.query(checkPayDetails, (err, data) => {
-    if (err) {
-      console.error("Database Error:", err);
-      return;
-    }
-
-    // Iterate over each item in the data array
-    data.forEach((item) => {
-      const { order_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, amount } = item;
-
-      try {
-        // Validate the payment verification
-        const isValid = validatePaymentVerification(
-          { order_id: razorpay_order_id, payment_id: razorpay_payment_id },
-          razorpay_signature,
-          secret
-        );
-
-        if (isValid) {
-          console.log(`Payment for order_id ${razorpay_order_id} is valid`);
-
-          // Update the payment status to 1 (or any other status you want)
-          const updatePaymentStatus = "UPDATE payment_log SET pstatus = 1 WHERE razorpay_order_id = ?";
-
-          con.query(updatePaymentStatus, [razorpay_order_id], (updateErr) => {
-            if (updateErr) {
-              console.error("Failed to update payment status:", updateErr);
-            } else {
-
-              const updateorder = "update `order` set ostatus = ? , orderstatus = 1 , payment_date = ? ,transactionid= ?, razor_orderid =? ,razor_signature= ?, transacamount= ? , paystatus = 1  where  id = ?  and deleted = 0"
-
-              con.query(updateorder, [Placed, date, razorpay_payment_id, razorpay_order_id, razorpay_signature, amount, order_id], (err, data) => {
-                if (err) {
-                  console.log(err)
-                } else {
-                  const updatecart = "update `awt_cart` set orderstatus = 1 where orderid = ?"
-
-                  con.query(updatecart, [order_id], (err, data) => {
-                    if (err) {
-                      console.log(err)
-                    } else {
-                      console.log(data)
-
-                    }
-                  })
-                }
-              })
-            }
-
-          });
-
-        } else {
-
-          const updatePaymentStatus = "UPDATE payment_log SET pstatus = 2 WHERE razorpay_order_id = ?";
-
-          con.query(updatePaymentStatus, [razorpay_order_id], (err, data) => {
-            if (err) {
-              console.log(err)
-            } else {
-              console.log("Payment Failed")
-            }
-          })
+//   const secret = process.env.RAZORPAY_SECRET;
+//   let Placed = "placed";
+//   const date = new Date()
 
 
+//   const checkPayDetails = "SELECT * FROM `payment_log` WHERE pstatus = 0 and deleted = 0";
 
+//   con.query(checkPayDetails, (err, data) => {
+//     if (err) {
+//       console.error("Database Error:", err);
+//       return;
+//     }
 
-        }
-      } catch (error) {
-        console.error(`Verification Error for order_id ${razorpay_order_id}:`, error);
-      }
+//     // Iterate over each item in the data array
+//     data.forEach((item) => {
+//       const { order_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, amount } = item;
 
+//       try {
+//         // Validate the payment verification
+//         const isValid = validatePaymentVerification(
+//           { order_id: razorpay_order_id, payment_id: razorpay_payment_id },
+//           razorpay_signature,
+//           secret
+//         );
 
-    });
-  });
-}
+//         if (isValid) {
+//           console.log(`Payment for order_id ${razorpay_order_id} is valid`);
+
+//           // Update the payment status to 1 (or any other status you want)
+//           const updatePaymentStatus = "UPDATE payment_log SET pstatus = 1 WHERE razorpay_order_id = ?";
+
+//           con.query(updatePaymentStatus, [razorpay_order_id], (updateErr) => {
+//             if (updateErr) {
+//               console.error("Failed to update payment status:", updateErr);
+//             } else {
+
+//               const updateorder = "update `order` set ostatus = ? , orderstatus = 1 , payment_date = ? ,transactionid= ?, razor_orderid =? ,razor_signature= ?, transacamount= ? , paystatus = 1  where  id = ?  and deleted = 0"
+
+//               con.query(updateorder, [Placed, date, razorpay_payment_id, razorpay_order_id, razorpay_signature, amount, order_id], (err, data) => {
+//                 if (err) {
+//                   console.log(err)
+//                 } else {
+//                   const updatecart = "update `awt_cart` set orderstatus = 1 where orderid = ?"
+
+//                   con.query(updatecart, [order_id], (err, data) => {
+//                     if (err) {
+//                       console.log(err)
+//                     } else {
+//                       console.log(data)
+
+//                     }
+//                   })
+//                 }
+//               })
+//             }
+
+//           });
+
+//         } else {
+
+//           const updatePaymentStatus = "UPDATE payment_log SET pstatus = 2 WHERE razorpay_order_id = ?";
+
+//           con.query(updatePaymentStatus, [razorpay_order_id], (err, data) => {
+//             if (err) {
+//               console.log(err)
+//             } else {
+//               console.log("Payment Failed")
+//             }
+//           })
 
 
 
 
+//         }
+//       } catch (error) {
+//         console.error(`Verification Error for order_id ${razorpay_order_id}:`, error);
+//       }
+
+
+//     });
+//   });
+// }
 
 if (cluster.isMaster) {
   console.log(`Master process is running with PID: ${process.pid}`);
@@ -152,52 +146,37 @@ if (cluster.isMaster) {
     cluster.fork();
   }
 
-  // Restart workers if they die, and assign cron job to a new worker
+
+
+  // Restart workers if they die
   cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died with code: ${code}, signal: ${signal}`);
-    cluster.fork();  // Fork a new worker
-
-
+    console.log(`Worker ${worker.process.pid} died. Restarting...`);
+    cluster.fork();
   });
+
 } else {
-  // Check if this worker should run the cron job
-  if (cluster.worker.id <2) {
-    console.log(`Worker ${cluster.worker.id} is running the cron job`);
-    cron.schedule('* * * * *', () => {
-      console.log(`Cron job running in worker ${cluster.worker.id}`);
-      try {
-        getPaymentStatus();
-      } catch (error) {
-        console.error('Error in cron job:', error);
-      }
-    });
-  }
-  
-
-
-
-
-  // All workers share the HTTP server
+  // Workers can share any TCP connection
+  // In this case, the workers share the HTTP server
   app.listen(8081, () => {
-    console.log(`Worker ${process.pid} satyam started`);
+    console.log(`Worker ${process.pid} started`);
   });
 }
 
-const con = sql.createConnection({
-  host: 'localhost',
-  user: 'food',
-  password: '',
-  database: 'food',
-})
-
-
 // const con = sql.createConnection({
 //   host: 'localhost',
-//   user: 'viggorve_umi',
-//   password: 'FDVL}LYY&dI2',
-//   database: 'viggorve_umi',
-//   timezone: '+05:30'
+//   user: 'food',
+//   password: '',
+//   database: 'food',
 // })
+
+
+const con = sql.createConnection({
+  host: 'localhost',
+  user: 'viggorve_umi',
+  password: 'FDVL}LYY&dI2',
+  database: 'viggorve_umi',
+  timezone: '+05:30'
+})
 
 con.connect((err) => {
   if (err) {
@@ -210,19 +189,18 @@ con.connect((err) => {
 
 
 app.get('/nodeapp/getos' , (req,res) =>{
-
-  return res.json({os:cluster.worker.id})
   
+  return res.json({os:numCPUs})
 })
 
 
 app.post('/nodeapp/user_login', (req, res) => {
-  let mobile = req.body.mobile;
+  let email = req.body.email;
   let otp = req.body.otp;
 
-  const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.mobile = ? and ar.deleted = 0 and ar.active = 1"
+  const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.email = ? and ar.deleted = 0 and ar.active = 1"
 
-  con.query(sql, [mobile], (err, data) => {
+  con.query(sql, [email], (err, data) => {
     if (err) {
       return res.json(err)
     } else {
@@ -235,18 +213,18 @@ app.post('/nodeapp/user_login', (req, res) => {
         let param;
 
 
-        console.log(mobile, "mobile")
+        console.log(email, "email")
 
-        if (mobile == "9326476448" || mobile == "9326476448") {
-          sql2 = "UPDATE awt_registeruser SET otp = '1141' WHERE mobile = ?";
-          param = [mobile]
+        if (email == "satyamsatkr875@gmail.com" || email == "Satyamsatkr875@gmail.com") {
+          sql2 = "UPDATE awt_registeruser SET otp = '1141' WHERE email = ?";
+          param = [email]
 
           console.log("1")
 
         } else {
 
-          sql2 = "UPDATE awt_registeruser SET otp = ? WHERE mobile = ?";
-          param = [otp, mobile]
+          sql2 = "UPDATE awt_registeruser SET otp = ? WHERE email = ?";
+          param = [otp, email]
 
           console.log("2")
         }
@@ -261,8 +239,8 @@ app.post('/nodeapp/user_login', (req, res) => {
 
             if (data.length !== 0) {
 
-              const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.mobile = ? and ar.deleted = 0;";
-              con.query(sql, [mobile], (err, data) => {
+              const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.email = ? and ar.deleted = 0;";
+              con.query(sql, [email], (err, data) => {
                 if (err) {
                   return res.json(err)
                 } else {
@@ -283,7 +261,7 @@ app.post('/nodeapp/user_login', (req, res) => {
                          }
                      })
 
-                //   return res.json(mobile)
+                //   return res.json(email)
                 }
               })
             }
@@ -307,20 +285,21 @@ app.post('/nodeapp/user_login', (req, res) => {
 
 
 app.post('/nodeapp/login', (req, res) => {
-  let mobile = req.body.mobile;
+  let email = req.body.email;
   let fullname = req.body.fullname;
+  let mobile = req.body.mobile;
   let otp = req.body.otp;
 
-  const sql = "SELECT * FROM awt_registeruser WHERE mobile = ? AND deleted = 0";
+  const sql = "SELECT * FROM awt_registeruser WHERE email = ? AND deleted = 0";
 
-  con.query(sql, [mobile], (err, data) => {
+  con.query(sql, [email], (err, data) => {
     if (err) {
       return res.json(err); // Return JSON error response
     } else {
       if (data.length !== 0) {
-        const updatesql = 'UPDATE `awt_registeruser` SET active = 1 , otp = ?  WHERE mobile = ? AND deleted = 0';
+        const updatesql = 'UPDATE `awt_registeruser` SET active = 1 , otp = ?  WHERE email = ? AND deleted = 0';
 
-        con.query(updatesql, [otp, mobile], (error, result) => {
+        con.query(updatesql, [otp, email], (error, result) => {
           if (error) {
             return res.json(error);
 
@@ -330,8 +309,8 @@ app.post('/nodeapp/login', (req, res) => {
 
           } else {
 
-            const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.mobile = ? and ar.deleted = 0;";
-            con.query(sql, [mobile], (err, data) => {
+            const sql = "SELECT ar.* , c.companyname, c.locationname , c.locationid FROM `awt_registeruser` as ar LEFT JOIN `company` as c on c.id = ar.companyid WHERE ar.email = ? and ar.deleted = 0;";
+            con.query(sql, [email], (err, data) => {
               if (err) {
                 return res.json(err)
               } else {
@@ -381,8 +360,8 @@ app.post('/nodeapp/otp', (req, res) => {
   let params;
 
   if (value == 1) {
-    const sql = "SELECT ar.role, ar.id,ar.email, ar.firstname,ar.lastname,ar.otp,ar.value, ar.mobile from awt_registeruser as ar where ar.mobile =?  and ar.otp = ? and ar.deleted = 0 ";
-    params = [mobile, otp]
+    const sql = "SELECT ar.role, ar.id,ar.email, ar.firstname,ar.lastname,ar.otp,ar.value, ar.mobile from awt_registeruser as ar where ar.email =?  and ar.otp = ? and ar.deleted = 0 ";
+    params = [email, otp]
 
     con.query(sql, params, (err, data) => {
       if (err) {
@@ -391,7 +370,7 @@ app.post('/nodeapp/otp', (req, res) => {
 
         //  const mailOptions = {
         //             from: process.env.SMTP_MAIL,
-        //             to: mobile,
+        //             to: email,
         //             subject: 'Welcome to Our Platform!',
         //             text: 'Thank you for registering. Your OTP is ' + otp,
         //           };
@@ -407,7 +386,7 @@ app.post('/nodeapp/otp', (req, res) => {
         //             if (error) {
         //               console.log(error);
         //             } else {
-        //               console.log('mobile sent: ' + data);
+        //               console.log('Email sent: ' + data);
         //             }
         //           });
         return res.json(data)
@@ -416,22 +395,22 @@ app.post('/nodeapp/otp', (req, res) => {
   }
 
   if (value == 0) {
-    const sql = "SELECT * from awt_registeruser_dummy where mobile = ? and otp = ? and deleted = 0 ";
-    params = [mobile, otp]
+    const sql = "SELECT * from awt_registeruser_dummy where email = ? and otp = ? and deleted = 0 ";
+    params = [email, otp]
     con.query(sql, params, (err, data) => {
       if (err) {
         return res.json(err)
       } else {
         if (data.length !== 0) {
 
-          const sql = "INSERT INTO awt_registeruser(`mobile`,`firstname`,`mobile`,`otp`,`created_date`) VALUES(?,?,?,?,?)"
+          const sql = "INSERT INTO awt_registeruser(`email`,`firstname`,`mobile`,`otp`,`created_date`) VALUES(?,?,?,?,?)"
 
-          con.query(sql, [mobile, fullname, mobile, otp, currentDate], (err, data) => {
+          con.query(sql, [email, fullname, mobile, otp, currentDate], (err, data) => {
             if (err) {
               return res.json(err)
             } else {
               const insertedId = data.insertId;
-              const sql = "SELECT ar.role, ar.id,ar.mobile, ar.firstname,ar.lastname,ar.otp,ar.value,au.pet_name, au.parent_name from awt_registeruser as ar left join awt_userprofile au on au.userid = ar.id WHERE ar.id = ? and ar.deleted = 0";
+              const sql = "SELECT ar.role, ar.id,ar.email, ar.firstname,ar.lastname,ar.otp,ar.value,au.pet_name, au.parent_name from awt_registeruser as ar left join awt_userprofile au on au.userid = ar.id WHERE ar.id = ? and ar.deleted = 0";
 
               con.query(sql, [insertedId], (err, data) => {
                 if (err) {
@@ -822,6 +801,37 @@ app.post('/nodeapp/banner', (req, res, next) => {
             }
         }
     });
+});
+  app.post('/nodeapp/banner_new', (req, res, next) => {
+    // Split the locid string by comma and convert it to an array of integers
+    const locidArray = req.body.locid.split(',').map(Number);
+    const version = req.body.version;
+    const ios = req.body.ios;
+    const user_id = req.body.user_id;
+    
+    const sql = 'SELECT r.*, ( SELECT GROUP_CONCAT(v.id) FROM `company` AS c LEFT JOIN `location` AS l ON FIND_IN_SET(l.id, c.locationid) LEFT JOIN `vendor` AS v ON l.id = v.location WHERE c.id = r.companyid AND l.deleted = 0 AND v.deleted = 0 ) AS vendor_list FROM `awt_registeruser` AS r WHERE r.id = ?';
+    
+    con.query(sql , [user_id] , (err,data) =>{
+        if(err){
+            return res.json(err)
+        }else{
+          
+            const company_id = data[0].companyid;
+            const vendor_list = data[0].vendor_list;
+            
+            const getbanner = 'select * from awt_banner where vendor_id IN (?) or company_id IN (?) and deleted = 0'
+            
+            con.query(getbanner , [vendor_list , company_id] , (err,productdata) =>{
+                if(err){
+                    return res.json(err)
+                }else{
+                    return res.json(productdata)
+                }
+                
+            } )
+        }
+    })
+    
 });
 
 app.post('/nodeapp/getlisting', (req, res, next) => {
@@ -1399,7 +1409,7 @@ app.post('/nodeapp/check_coupen_new', (req, res) => {
         const vendorMatches = vendors.some((vendor) => vendor.some(id => parsedV_id.includes(id)))
         const companyMatches = company.some(innerArray => innerArray.includes(Number(companyid)))
 
-        if (vendorMatches && companyMatches) {
+        if (vendorMatches || companyMatches) {
           const enddate = data[0].endDate;
           const startdate = data[0].startDate;
           const couponid = data[0].id
@@ -1417,7 +1427,7 @@ app.post('/nodeapp/check_coupen_new', (req, res) => {
 
                 } else {
 
-                  const minmaxAmt = "select * from `awt_coupon_code` where minAmt <= ? AND maxAmt >= ? AND couponCode = ? ";
+                  const minmaxAmt = "select * from `awt_coupon_code` where minAmt <= ?  AND couponCode = ? ";
 
                   con.query(minmaxAmt, [amount, amount, coupon], (err, data) => {
                     if (err) {
@@ -2379,6 +2389,15 @@ app.post('/nodeapp/payment_verify', (req, res) => {
 
 
 
+//   cron.schedule('* * * * *', async () => {
+//     try {
+//       console.log('Running scheduled task');
+//       await checkpaymentstatus();  // Ensure async errors are caught
+//     } catch (error) {
+//       console.error('Error occurred in async cron job:', error);
+//     }
+//   });
+
 app.post('/nodeapp/checkversion', (req, res) => {
 
   let myversion = req.body.myversion;
@@ -2506,78 +2525,4 @@ app.post('/nodeapp/confirmdelete', (req, res) => {
         }
     });
 });
-
-const getPaymentStatus = async () => {
-  
-  const razorpayKey = process.env.RAZORPAY_KEY_ID;
-  const razorpaySecret = process.env.RAZORPAY_SECRET;
-  let Placed = "placed";
-  const date = new Date();
-
-  // Promise-based MySQL query function
-  const queryAsync = (query, params) => {
-    return new Promise((resolve, reject) => {
-      con.query(query, params, (err, data) => {
-        if (err) reject(err);
-        else resolve(data);
-      });
-    });
-  };
-
-  // Fetch pending payments
-  const checkPayDetails = "SELECT * FROM `php_payment_log` WHERE pstatus = 0 and deleted = 0";
-
-  try {
-    const data = await queryAsync(checkPayDetails);
-
-    // Iterate over each item in the data array
-    for (const item of data) {
-      const { order_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, amount } = item;
-
-      try {
-        // Fetch payment details from Razorpay
-        const response = await axios.get(`https://api.razorpay.com/v1/orders/${razorpay_order_id}`, {
-          auth: {
-            username: razorpayKey,
-            password: razorpaySecret
-          }
-        });
-
-        const isValid = response.data.status === 'paid'; // Check payment status
-
-        if (isValid) {
-          console.log(`Payment for order_id ${razorpay_order_id} is valid`);
-
-          // Update payment_log table
-          const updatePaymentStatus = "UPDATE php_payment_log SET pstatus = 1 WHERE razorpay_order_id = ?";
-          await queryAsync(updatePaymentStatus, [razorpay_order_id]);
-
-          // Update order table
-          const updateOrderQuery = `
-            UPDATE \`order\` 
-            SET ostatus = ?, orderstatus = 1, payment_date = ?, transactionid = ?, razor_orderid = ?, razor_signature = ?, transacamount = ?, paystatus = 1 
-            WHERE id = ? AND deleted = 0
-          `;
-          await queryAsync(updateOrderQuery, [Placed, date, razorpay_payment_id, razorpay_order_id, razorpay_signature, amount, order_id]);
-
-          // Update cart status
-          const updateCartQuery = "UPDATE `awt_cart` SET orderstatus = 1 WHERE orderid = ?";
-          await queryAsync(updateCartQuery, [order_id]);
-
-        } else {
-          console.log(`Payment for order_id ${razorpay_order_id} failed`);
-
-          // Update payment status to 2 (failed)
-          const updatePaymentStatus = "UPDATE php_payment_log SET pstatus = 2 WHERE razorpay_order_id = ?";
-          await queryAsync(updatePaymentStatus, [razorpay_order_id]);
-        }
-
-      } catch (error) {
-        console.error(`Verification Error for order_id ${razorpay_order_id}:`, error);
-      }
-    }
-  } catch (err) {
-    console.error("Error fetching payment details:", err);
-  }
-};
 
